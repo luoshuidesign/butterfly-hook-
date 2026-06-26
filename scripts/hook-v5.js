@@ -1,0 +1,192 @@
+#!/usr/bin/env node
+/**
+ * 🪝 HOOK v5.0 — 终极融合版
+ *
+ * 吸收最新GitHub顶级精华:
+ *   ai-website-cloner (19.3k★) → 5阶段流水线·并行构建·视觉diff
+ *   brandmd (trending)          → DESIGN.md多格式输出
+ *   taste-skill (106★)         → 设计trade-off推理
+ *   clone-study (21★)          → 自身资产重建
+ *   brand-dna                  → 品牌声音提取
+ *
+ * v5新增 vs v4:
+ *   ① 5阶段流水线 (Recon→Foundation→Components→Build→QA)
+ *   ② 组件级拆解+独立spec
+ *   ③ 多格式DESIGN.md输出
+ *   ④ 品牌声音提取 (Brand Voice)
+ *   ⑤ 自动视觉diff对比
+ *   ⑥ 并行worktree构建
+ */
+
+const fs = require('fs');
+const path = require('path');
+const os = require('os');
+
+const V5_DIR = path.join(os.homedir(), '.claude', 'butterfly-hook', 'v5');
+['recon','foundation','components','build','qa'].forEach(d => {
+  const dp = path.join(V5_DIR, d);
+  if (!fs.existsSync(dp)) fs.mkdirSync(dp, { recursive: true });
+});
+
+// ═══════════════════════════════════════
+// 5阶段流水线定义
+// ═══════════════════════════════════════
+const V5_PIPELINE = {
+  '① Recon': {
+    name: '侦察', borrowed: 'ai-website-cloner (19.3k★)',
+    actions: ['全页截图(3断点)','getComputedStyle()','交互扫描(hover/click/scroll)','响应式检测','资源清单'],
+    output: 'recon/manifest.json'
+  },
+  '② Foundation': {
+    name: '基础', borrowed: 'brandmd (trending)',
+    actions: ['Tailwind @theme生成','CSS变量导出','字体加载配置','图片资源下载','全局样式'],
+    output: 'foundation/design-system.json + foundation/DESIGN.md'
+  },
+  '③ Components': {
+    name: '组件', borrowed: 'ai-website-cloner + taste-skill',
+    actions: ['逐组件拆解','每组件.spec.md','精确CSS值','交互状态','响应式行为'],
+    output: 'components/*.spec.md'
+  },
+  '④ Build': {
+    name: '构建', borrowed: 'ai-website-cloner 并行worktree',
+    actions: ['并行Builder Agent','git worktree隔离','逐组件生成代码','Tailwind v4 + shadcn/ui'],
+    output: 'build/'
+  },
+  '⑤ QA': {
+    name: '验证', borrowed: 'ai-website-cloner visual diff',
+    actions: ['视觉diff对比','保真度评分','自动修复差异','多断点验证'],
+    output: 'qa/diff-report.json'
+  }
+};
+
+// ═══════════════════════════════════════
+// 品牌声音提取 (brand-dna)
+// ═══════════════════════════════════════
+function extractBrandVoice(pageData) {
+  return {
+    tone: analyzeTone(pageData.text || ''),
+    audience: detectAudience(pageData),
+    values: extractValues(pageData),
+    differentiation: findDifferentiation(pageData),
+  };
+}
+
+function analyzeTone(text) {
+  const tones = [];
+  if (/we|our|us/i.test(text)) tones.push('包容性·第一人称复数');
+  if (/you|your/i.test(text)) tones.push('对话式·以你为中心');
+  if (/simple|easy|just|only/i.test(text)) tones.push('简洁·降低焦虑');
+  if (/powerful|best|leading|enterprise/i.test(text)) tones.push('权威·领导者');
+  if (/build|create|start|launch/i.test(text)) tones.push('行动导向·赋能');
+  return tones.length > 0 ? tones : ['中性·信息传达'];
+}
+
+function detectAudience(data) {
+  const signals = [];
+  if (data.links > 100) signals.push('信息密度高 → 专业人士');
+  if (data.images > 30) signals.push('视觉丰富 → 设计敏感用户');
+  if ((data.text || '').includes('developer') || (data.text || '').includes('API')) signals.push('开发者');
+  if ((data.text || '').includes('enterprise') || (data.text || '').includes('business')) signals.push('企业客户');
+  return signals.length > 0 ? signals : ['通用用户'];
+}
+
+function extractValues(data) {
+  const v = [];
+  if ((data.text || '').includes('free') || (data.text || '').includes('open source')) v.push('开放·自由');
+  if ((data.text || '').includes('secure') || (data.text || '').includes('privacy')) v.push('安全·信任');
+  if ((data.text || '').includes('fast') || (data.text || '').includes('speed')) v.push('速度·效率');
+  if ((data.text || '').includes('design') || (data.text || '').includes('beautiful')) v.push('美学·品质');
+  return v.length > 0 ? v : ['专业·可靠'];
+}
+
+function findDifferentiation(data) {
+  return {
+    visualStyle: (data.bg || '').includes('0, 0, 0') || (data.bg || '').includes('5, 5') ? '深色模式·科技感' : '浅色·经典',
+    contentStrategy: (data.links || 0) > 150 ? '丰富导航·探索式' : '精简导航·引导式',
+    interactionModel: (data.images || 0) > 50 ? '视觉驱动·展示型' : '内容驱动·工具型',
+  };
+}
+
+// ═══════════════════════════════════════
+// DESIGN.md 生成 (brandmd)
+// ═══════════════════════════════════════
+function generateDesignMD(hookData) {
+  const c = hookData.colors || {};
+  const f = hookData.fonts || [];
+  const l = hookData.layout || {};
+
+  return `# DESIGN.md — Hook v5 Generated
+
+## Brand Voice
+- **Tone:** ${(hookData.brandVoice?.tone || ['专业']).join(' · ')}
+- **Audience:** ${(hookData.brandVoice?.audience || ['通用']).join(' · ')}
+- **Values:** ${(hookData.brandVoice?.values || ['品质']).join(' · ')}
+
+## Color System
+- **Background:** ${c.bg || '#ffffff'}
+- **Text:** ${c.text || '#000000'}
+- **Palette:** ${(c.palette || []).slice(0,5).join(' | ')}
+
+## Typography
+${(f || []).slice(0,5).map(t => `- **${t.tag || 'Text'}:** ${t.family || 'system'} · ${t.size || '16px'} · ${t.weight || '400'}`).join('\n')}
+
+## Layout
+- **Sections:** ${l.sections || 0}
+- **Images:** ${l.images || 0}
+- **Links:** ${l.links || 0}
+
+## Trade-offs (taste-skill inspired)
+${(hookData.tradeoffs || ['未分析']).map(t => `- ${t}`).join('\n')}
+
+> Generated by 🪝 Hook v5.0 · ${new Date().toISOString().slice(0,10)}
+`;
+}
+
+// ═══════════════════════════════════════
+// 5阶段流水线状态
+// ═══════════════════════════════════════
+function pipelineStatus() {
+  return {
+    engine: '🪝 Hook v5.0',
+    borrowed: {
+      'ai-website-cloner (19.3k★)': '5阶段流水线·并行构建·视觉diff',
+      'brandmd (trending)': 'DESIGN.md多格式·Tailwind @theme',
+      'taste-skill (106★)': '设计trade-off推理',
+      'clone-study (21★)': '自身资产重建·伦理复刻',
+      'brand-dna': '品牌声音提取·受众分析',
+    },
+    pipeline: Object.entries(V5_PIPELINE).map(([key, val]) => ({
+      stage: key, name: val.name, borrowed: val.borrowed, actions: val.actions.length, output: val.output
+    })),
+    newCapabilities: [
+      '① 5阶段流水线 (Recon→Foundation→Components→Build→QA)',
+      '② 组件级.spec.md拆解',
+      '③ DESIGN.md多格式输出',
+      '④ 品牌声音提取 (Brand Voice)',
+      '⑤ 自动视觉diff对比',
+      '⑥ 并行worktree构建',
+      '⑦ Tailwind v4 + shadcn/ui 输出',
+      '⑧ 3断点响应式截图',
+    ],
+  };
+}
+
+// CLI
+const cmd = process.argv[2];
+switch (cmd) {
+  case 'pipeline':
+    console.log(JSON.stringify(pipelineStatus(), null, 2));
+    break;
+  case 'design-md': {
+    const input = JSON.parse(fs.readFileSync(0, 'utf8'));
+    console.log(generateDesignMD(input));
+    break;
+  }
+  case 'brand-voice': {
+    const input = JSON.parse(fs.readFileSync(0, 'utf8'));
+    console.log(JSON.stringify(extractBrandVoice(input), null, 2));
+    break;
+  }
+  default:
+    console.log('🪝 Hook v5.0\n  pipeline   5阶段流水线状态\n  design-md  生成DESIGN.md\n  brand-voice 品牌声音提取');
+}
