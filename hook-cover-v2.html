@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=1200,initial-scale=1"><title>Hook Cover</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#000}
+.cover{width:1200px;height:630px;position:relative;overflow:hidden;background:linear-gradient(175deg,#07071a 0%,#0a0a24 30%,#020212 55%,#010510 100%);font-family:system-ui,-apple-system,sans-serif}
+/* 天空微光 */
+.sky{position:absolute;top:0;left:0;width:100%;height:48%;background:radial-gradient(ellipse at 40% 90%,rgba(120,100,255,.06) 0%,transparent 60%),radial-gradient(ellipse at 70% 85%,rgba(80,200,180,.04) 0%,transparent 50%)}
+/* 海面分界线 */
+.surface-line{position:absolute;top:48%;left:0;width:100%;height:2px;background:linear-gradient(90deg,transparent 5%,rgba(120,100,255,.3) 20%,rgba(80,200,180,.4) 40%,rgba(120,100,255,.5) 50%,rgba(80,200,180,.4) 60%,rgba(120,100,255,.3) 80%,transparent 95%);box-shadow:0 0 40px rgba(120,100,255,.15),0 -2px 20px rgba(80,200,180,.1)}
+/* 水下 */
+.ocean{position:absolute;bottom:0;left:0;width:100%;height:52%;background:linear-gradient(180deg,rgba(0,15,45,.85) 0%,rgba(0,8,30,.95) 30%,rgba(0,3,15,.98) 70%,rgba(0,0,5,1) 100%)}
+/* 钓竿 */
+.rod-wrap{position:absolute;top:50px;right:80px;width:300px;height:280px}
+.rod-line{position:absolute;top:60px;right:140px;width:2px;height:140px;background:linear-gradient(180deg,rgba(180,160,120,.6),rgba(180,160,120,.2));transform:rotate(-12deg);transform-origin:top center}
+.rod-line::after{content:'';position:absolute;bottom:-1px;left:-3px;width:8px;height:8px;background:rgba(120,100,255,.6);border-radius:50%;box-shadow:0 0 20px rgba(120,100,255,.8),0 0 40px rgba(120,100,255,.4)}
+/* 钩子 */
+.hook-glow{position:absolute;top:345px;right:147px;width:40px;height:40px;background:radial-gradient(circle,rgba(120,100,255,.4) 0%,rgba(80,200,180,.2) 40%,transparent 70%);border-radius:50%}
+/* 水下标籤容器 */
+.tags{position:absolute;bottom:60px;left:0;width:100%;display:flex;justify-content:center;gap:20px;flex-wrap:wrap;padding:0 60px}
+.tag{padding:16px 28px;border-radius:14px;font-size:17px;font-weight:600;letter-spacing:.5px;backdrop-filter:blur(20px);transition:all .3s;cursor:default}
+.tag:nth-child(1){background:rgba(120,100,255,.1);border:1px solid rgba(120,100,255,.25);color:rgba(200,190,255,.9)}
+.tag:nth-child(2){background:rgba(80,200,180,.08);border:1px solid rgba(80,200,180,.2);color:rgba(160,240,225,.9)}
+.tag:nth-child(3){background:rgba(255,180,80,.08);border:1px solid rgba(255,180,80,.2);color:rgba(255,210,140,.9)}
+.tag:nth-child(4){background:rgba(200,120,255,.08);border:1px solid rgba(200,120,255,.2);color:rgba(220,160,255,.9)}
+.tag:nth-child(5){background:rgba(100,200,255,.08);border:1px solid rgba(100,200,255,.2);color:rgba(160,220,255,.9)}
+.tag:nth-child(6){background:rgba(255,140,140,.08);border:1px solid rgba(255,140,140,.2);color:rgba(255,180,180,.9)}
+.tag:nth-child(7){background:rgba(120,255,140,.08);border:1px solid rgba(120,255,140,.2);color:rgba(160,255,180,.9)}
+.tag:hover{transform:translateY(-4px)}
+/* 标题 */
+.title{position:absolute;top:55px;left:80px;color:#fff;font-size:56px;font-weight:800;letter-spacing:-2px;line-height:1}
+.title-sub{position:absolute;top:125px;left:80px;color:rgba(255,255,255,.45);font-size:19px;font-weight:400;letter-spacing:1px}
+/* 标语 */
+.slogan{position:absolute;top:310px;left:80px;color:rgba(255,255,255,.35);font-size:15px;font-weight:400;letter-spacing:2px;text-transform:uppercase}
+/* Canvas背景 */
+canvas{position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none}
+</style></head>
+<body>
+<div class="cover">
+  <canvas id="bg"></canvas>
+  <div class="sky"></div>
+  <div class="surface-line"></div>
+  <div class="ocean"></div>
+  <div class="rod-line"></div>
+  <div class="hook-glow"></div>
+  <div class="title">🪝 Hook</div>
+  <div class="title-sub">数字海洋的钓竿</div>
+  <div class="slogan">HOOK · TRANSFORM · CREATE · EVOLVE</div>
+  <div class="tags">
+    <span class="tag">🧠 智慧代码</span>
+    <span class="tag">💡 创意变量</span>
+    <span class="tag">💰 商业设计</span>
+    <span class="tag">🎨 配色哲学</span>
+    <span class="tag">🔤 字体系统</span>
+    <span class="tag">✨ 动效规律</span>
+    <span class="tag">🌍 Everything</span>
+  </div>
+</div>
+<script>
+const C=document.getElementById('bg'),ctx=C.getContext('2d');C.width=1200;C.height=630;
+const pts=[];for(let i=0;i<80;i++){const y=Math.random()*630;pts.push({x:Math.random()*1200,y,r:.6+Math.random()*1.8,vx:(Math.random()-.5)*.3,vy:y>310?.2+Math.random()*.5:(Math.random()-.5)*.2,alpha:y>310?.03+Math.random()*.1:.02+Math.random()*.04,color:y>310?Math.random()>.5?'120,100,255':'80,200,180':'180,180,200'})}
+function draw(){ctx.clearRect(0,0,1200,630);pts.forEach(p=>{p.x+=p.vx;p.y+=p.vy;if(p.x<0)p.x=1200;if(p.x>1200)p.x=0;if(p.y>630)p.y=310;if(p.y<0)p.y=0;ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);ctx.fillStyle='rgba('+p.color+','+p.alpha+')';ctx.fill()});
+for(let i=0;i<pts.length;i++){for(let j=i+1;j<pts.length;j++){const d=Math.hypot(pts[i].x-pts[j].x,pts[i].y-pts[j].y);if(d<90){ctx.beginPath();ctx.moveTo(pts[i].x,pts[i].y);ctx.lineTo(pts[j].x,pts[j].y);ctx.strokeStyle='rgba('+pts[i].color+','+(.03*(1-d/90))+')';ctx.stroke()}}}requestAnimationFrame(draw)}draw();
+</script>
+</body></html>
