@@ -1,0 +1,87 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=1200,initial-scale=1"><title>Hook Cover</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}body{background:#000}
+.c{width:1200px;height:630px;position:relative;overflow:hidden;background:linear-gradient(180deg,#0a0a20 0%,#06061a 30%,#010515 36%,#000510 100%);font-family:system-ui,-apple-system,sans-serif}
+
+/* 钓竿 */
+.rod-wrap{position:absolute;top:25px;left:150px;z-index:10}
+.rod{width:6px;height:260px;background:linear-gradient(180deg,#f0d8a8 0%,#c89848 30%,#8b5a1a 70%,#4a2008 100%);border-radius:3px 3px 1px 1px;transform:rotate(15deg);transform-origin:top center;box-shadow:0 0 30px rgba(200,160,100,.25)}
+.rod-handle{position:absolute;bottom:-20px;left:-6px;width:18px;height:50px;background:linear-gradient(180deg,#3a1808,#2a1008);border-radius:4px;transform:rotate(15deg);transform-origin:top center}
+
+/* 鱼线 - 连接竿尖 */
+.fishing-line{position:absolute;top:30px;left:218px;width:1px;height:200px;background:rgba(255,255,255,.2);transform:rotate(6deg);transform-origin:top center;z-index:9}
+.fishing-line::before{content:'';position:absolute;top:0;left:-1px;width:3px;height:3px;background:rgba(200,160,100,.8);border-radius:50%}
+
+/* 钩子 - 精美设计 */
+.hook-container{position:absolute;top:225px;left:228px;z-index:12}
+/* 钩身 */
+.hook-body{position:absolute;width:3px;height:60px;background:linear-gradient(180deg,rgba(200,220,255,.8),rgba(140,180,255,.9),rgba(100,160,240,.8));border-radius:2px;box-shadow:0 0 10px rgba(140,200,255,.4)}
+/* 钩弯 */
+.hook-curve{position:absolute;top:52px;left:-12px;width:28px;height:28px;border:3px solid rgba(140,180,255,.9);border-radius:0 0 14px 14px;border-top:none;box-shadow:0 0 15px rgba(140,200,255,.5),0 0 30px rgba(100,160,240,.3)}
+/* 钩尖 */
+.hook-tip{position:absolute;top:62px;left:14px;width:3px;height:18px;background:linear-gradient(180deg,rgba(140,200,255,.9),rgba(200,240,255,.95));border-radius:1px;transform:rotate(-8deg);box-shadow:0 0 12px rgba(180,220,255,.6)}
+/* 倒刺 */
+.hook-barb{position:absolute;top:69px;left:10px;width:8px;height:3px;background:rgba(180,220,255,.8);border-radius:1px;transform:rotate(-20deg)}
+/* 钩子光晕 */
+.hook-glow{position:absolute;top:30px;left:-20px;width:70px;height:80px;background:radial-gradient(ellipse at 50% 60%,rgba(140,200,255,.3) 0%,rgba(100,160,240,.1) 40%,transparent 70%);border-radius:50%}
+
+/* Logo - 鱼钩造型 */
+.logo{position:absolute;top:395px;left:80px;z-index:10}
+.logo svg{filter:drop-shadow(0 0 20px rgba(140,200,255,.4))}
+
+/* 标题 */
+.title{position:absolute;top:40px;left:380px;color:#fff;font-size:64px;font-weight:800;letter-spacing:-3px;z-index:10;text-shadow:0 0 60px rgba(140,200,255,.15)}
+.title-sub{position:absolute;top:115px;left:385px;color:rgba(255,255,255,.35);font-size:18px;font-weight:400;letter-spacing:2px;z-index:10}
+
+/* 浮动文字 - 无框·自由游动 */
+.floating-text{position:absolute;top:38%;left:0;width:100%;height:62%;z-index:8}
+.fish{position:absolute;color:rgba(255,255,255,.55);font-size:17px;font-weight:500;text-shadow:0 0 15px rgba(140,200,255,.3);white-space:nowrap;pointer-events:none}
+
+/* 深水区 */
+.deep{position:absolute;top:36%;left:0;width:100%;height:64%;background:linear-gradient(180deg,rgba(0,8,25,.8) 0%,rgba(0,4,15,.95) 30%,rgba(0,1,6,1) 100%)}
+
+canvas{position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none}
+#bg{z-index:1}#waves{z-index:3}
+</style></head><body>
+<div class="c">
+<canvas id="bg"></canvas>
+<canvas id="waves"></canvas>
+
+<!-- 钓竿+线+钩 -->
+<div class="rod-wrap"><div class="rod"></div><div class="rod-handle"></div></div>
+<div class="fishing-line"></div>
+<div class="hook-container"><div class="hook-glow"></div><div class="hook-body"></div><div class="hook-curve"></div><div class="hook-tip"></div><div class="hook-barb"></div></div>
+
+<div class="deep"></div>
+
+<!-- Logo -->
+<div class="logo">
+<svg width="60" height="60" viewBox="0 0 60 60"><defs><linearGradient id="hg" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#c8e0ff"/><stop offset="100%" stop-color="#6098e0"/></linearGradient></defs><circle cx="30" cy="30" r="28" fill="none" stroke="url(#hg)" stroke-width="2.5" opacity=".5"/><line x1="30" y1="8" x2="30" y2="35" stroke="url(#hg)" stroke-width="3" stroke-linecap="round"/><path d="M18 42 Q30 55 42 42" fill="none" stroke="url(#hg)" stroke-width="3" stroke-linecap="round"/><line x1="40" y1="42" x2="44" y2="35" stroke="url(#hg)" stroke-width="2.5" stroke-linecap="round"/><line x1="40" y1="42" x2="36" y2="48" stroke="url(#hg)" stroke-width="1.5" stroke-linecap="round"/></svg>
+</div>
+
+<div class="title">🪝 Hook</div>
+<div class="title-sub">数字海洋的钓竿 · 钩住万物·化为智慧</div>
+
+<!-- 游动的文字 -->
+<div class="floating-text" id="sea"></div>
+</div>
+
+<script>
+// 背景粒子
+(function(){const c=document.getElementById('bg'),ctx=c.getContext('2d');c.width=1200;c.height=630;const P=[];for(let i=0;i<150;i++){const y=Math.random()*630;P.push({x:Math.random()*1200,y,r:.2+Math.random()*1.2,vx:(Math.random()-.5)*.15,vy:y>240?.08+Math.random()*.3:(Math.random()-.5)*.08,a:y>240?.02+Math.random()*.06:.005+Math.random()*.015,c:y>240?Math.random()>.5?'120,180,230':'100,140,220':'180,185,210'})}
+(function D(){ctx.clearRect(0,0,1200,630);P.forEach(p=>{p.x+=p.vx;p.y+=p.vy;if(p.x<0)p.x=1200;if(p.x>1200)p.x=0;if(p.y>630)p.y=240;if(p.y<0)p.y=0;ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);ctx.fillStyle='rgba('+p.c+','+p.a+')';ctx.fill()});requestAnimationFrame(D)})()})();
+
+// 波浪
+(function(){const c=document.getElementById('waves'),ctx=c.getContext('2d');c.width=1200;c.height=630;let t=0;(function D(){t+=.018;ctx.clearRect(0,0,1200,630);
+// 波纹1
+ctx.beginPath();for(let x=0;x<=1200;x+=2){const y=228+Math.sin(x*.006+t)*7+Math.sin(x*.012+t*1.4)*5+Math.sin(x*.002+t*.6)*10}ctx.lineTo(1200,240);ctx.lineTo(0,240);ctx.closePath();const g1=ctx.createLinearGradient(0,200,0,260);g1.addColorStop(0,'rgba(80,180,220,.2)');g1.addColorStop(.5,'rgba(100,200,240,.1)');g1.addColorStop(1,'rgba(120,100,255,0)');ctx.fillStyle=g1;ctx.fill();
+// 高光线
+ctx.beginPath();for(let x=0;x<=1200;x+=2){const y=228+Math.sin(x*.006+t)*7+Math.sin(x*.012+t*1.4)*5+Math.sin(x*.002+t*.6)*10;x===0?ctx.moveTo(x,y):ctx.lineTo(x,y)}ctx.strokeStyle='rgba(100,200,240,.35)';ctx.lineWidth=1.5;ctx.stroke();
+requestAnimationFrame(D)})()})();
+
+// 游动的文字 - 像鱼一样
+(function(){const sea=document.getElementById('sea');const words=['🧠 智慧代码','💡 创意变量','💰 商业设计','🎨 配色哲学','🔤 字体系统','✨ 动效规律','🧬 自进化','🌍 Everything','📐 布局几何','🎯 CSS变量','🛡️ 十层防护','🦋 蝶变进化','⚡ 30条通道','🔍 保真度验证','💾 知识库','🎣 万物可钩'];
+words.forEach((w,i)=>{const el=document.createElement('span');el.className='fish';el.textContent=w;el.style.left=(80+Math.random()*900)+'px';el.style.top=(60+Math.random()*280)+'px';el.style.fontSize=(14+Math.random()*10)+'px';el.style.opacity=(.25+Math.random()*.45);el.speedX=(Math.random()-.5)*.4;el.speedY=(Math.random()-.5)*.3;el.phase=Math.random()*Math.PI*2;el.baseX=parseFloat(el.style.left);el.baseY=parseFloat(el.style.top);sea.appendChild(el)});
+(function S(){const now=Date.now()/1000;document.querySelectorAll('.fish').forEach(el=>{const x=el.baseX+Math.sin(now*.3+el.phase)*40+Math.cos(now*.2+el.phase)*25;const y=el.baseY+Math.cos(now*.25+el.phase)*25+Math.sin(now*.35+el.phase)*15;el.style.transform='translate('+(x-el.baseX)+'px,'+(y-el.baseY)+'px)';const a=.25+Math.sin(now*.5+el.phase)*.15;el.style.opacity=Math.max(.15,Math.min(.6,a))});requestAnimationFrame(S)})()})();
+</script>
+</body></html>
