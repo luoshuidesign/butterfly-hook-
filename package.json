@@ -1,0 +1,23 @@
+{
+  "name": "butterfly-hook",
+  "version": "5.0.0",
+  "description": "🪝 See the soul behind any design. 30 dark passages. 18 dimensions. Everything is hookable.",
+  "main": "scripts/hook-master.js",
+  "bin": {
+    "butterfly-hook": "./scripts/hook-master.js",
+    "hook": "./scripts/hook-master.js"
+  },
+  "keywords": [
+    "design", "extract", "clone", "css", "design-system",
+    "tokens", "website", "ai", "claude-code", "mcp",
+    "dtcg", "wcag", "tailwind", "nextjs"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/luoshuidesign/butterfly-hook-"
+  },
+  "license": "MIT",
+  "engines": {
+    "node": ">=18"
+  }
+}
