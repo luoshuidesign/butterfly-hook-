@@ -1,0 +1,102 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=1200,initial-scale=1"><title>Butterfly Hook</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500;600;700&display=swap');
+*{margin:0;padding:0}body{background:#000;display:flex;justify-content:center;align-items:center;min-height:100vh}
+.c{width:1200px;height:630px;position:relative;overflow:hidden;font-family:'Inter',sans-serif}
+
+/* Above water — warm sunset sky + cliff silhouette */
+.above{position:absolute;top:0;left:0;width:100%;height:43%;background:linear-gradient(180deg,#3a1858 0%,#5a2878 15%,#7a3898 30%,#b860a0 50%,#e890b8 70%,#f0b8c8 85%,#f8d0d8 100%)}
+.cliff{position:absolute;top:60px;left:0;width:200px;height:180px;background:linear-gradient(180deg,#0a1a10,#0d2014 60%,#0a1a10);clip-path:polygon(0 10%,40% 0,100% 15%,100% 80%,80% 100%,30% 90%,0 100%)}
+.trees{position:absolute;top:55px;left:10px;width:180px;height:30px}
+.tree{position:absolute;width:8px;background:linear-gradient(180deg,#0d2818,#0a1a10);border-radius:50% 50% 0 0}
+
+/* Sun */
+.sun{position:absolute;top:100px;right:250px;width:60px;height:60px;background:radial-gradient(circle,rgba(255,220,200,.9),rgba(255,180,150,.4),rgba(255,150,120,0));border-radius:50%;box-shadow:0 0 60px rgba(255,180,150,.4),0 0 120px rgba(255,150,120,.2)}
+.horizon{position:absolute;top:170px;left:0;width:100%;height:40px;background:linear-gradient(180deg,rgba(255,200,180,.3),transparent)}
+
+/* Water surface */
+.surface{position:absolute;top:42.5%;left:0;width:100%;height:3px;background:rgba(255,255,255,.5);box-shadow:0 0 30px rgba(200,180,220,.4),0 0 60px rgba(150,140,200,.2)}
+
+/* Below water — deep blue canyon */
+.below{position:absolute;top:43%;left:0;width:100%;height:57%;background:linear-gradient(180deg,#1a5080 0%,#0d3860 8%,#082848 20%,#041830 40%,#020c18 65%,#010610 100%)}
+
+/* Underwater canyon walls */
+.wall-left{position:absolute;top:43%;left:0;width:180px;height:57%;background:linear-gradient(90deg,rgba(2,8,16,.9),rgba(2,8,16,.5) 60%,transparent)}
+.wall-right{position:absolute;top:43%;right:0;width:150px;height:57%;background:linear-gradient(270deg,rgba(2,8,16,.85),rgba(2,8,16,.4) 60%,transparent)}
+
+/* Light rays */
+.ray{position:absolute;top:43%;background:linear-gradient(180deg,rgba(100,180,220,.12),rgba(60,140,200,.06),transparent);transform-origin:top center}
+
+/* Logo */
+.brand{position:absolute;top:36px;left:240px;display:flex;align-items:center;gap:12px;z-index:10}
+.brand svg{filter:drop-shadow(0 0 8px rgba(255,200,220,.3))}
+.brand-cn{color:rgba(255,240,245,.9);font-size:22px;font-weight:500;letter-spacing:-.2px;text-shadow:0 0 20px rgba(255,200,220,.3)}
+.brand-en{color:rgba(255,220,235,.4);font-size:8px;font-weight:500;letter-spacing:3px;margin-left:4px}
+.tag{position:absolute;top:100px;left:244px;color:rgba(255,220,235,.3);font-size:10px;letter-spacing:3px;z-index:10}
+
+/* Floating text */
+.words{position:absolute;top:46%;left:30px;right:30px;bottom:30px;z-index:8}
+
+canvas{position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none}
+</style></head><body>
+<div class="c">
+<div class="above"></div>
+<div class="cliff"></div>
+<div class="sun"></div>
+<div class="horizon"></div>
+<div class="surface"></div>
+<div class="below"></div>
+<div class="wall-left"></div><div class="wall-right"></div>
+<div class="ray" style="left:30%;width:8%;height:80%"></div>
+<div class="ray" style="left:50%;width:6%;height:70%"></div>
+<div class="ray" style="left:65%;width:5%;height:85%"></div>
+
+<div class="brand">
+  <svg width="28" height="28" viewBox="0 0 28 28"><defs><linearGradient id="g" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#f8c8d8"/><stop offset="100%" stop-color="#c880b0"/></linearGradient></defs><path d="M14 2 Q4 7 6 17 Q8 22 14 13" fill="none" stroke="url(#g)" stroke-width="1.8" stroke-linecap="round"/><path d="M14 2 Q24 7 22 17 Q20 22 14 13" fill="none" stroke="url(#g)" stroke-width="1.8" stroke-linecap="round"/><line x1="14" y1="12" x2="14" y2="23" stroke="url(#g)" stroke-width="2" stroke-linecap="round"/><path d="M14 23 Q14 26 11.5 25" fill="none" stroke="url(#g)" stroke-width="2" stroke-linecap="round"/></svg>
+  <span class="brand-cn">蝴蝶钩</span><span class="brand-en">BUTTERFLY HOOK</span>
+</div>
+<div class="tag">HOOK · TRANSFORM · CREATE · EVOLVE</div>
+
+<div class="words" id="words"></div>
+<canvas id="c"></canvas>
+</div>
+
+<script>
+const C=document.getElementById('c'),ctx=C.getContext('2d');C.width=1200;C.height=630;let t=0;
+
+const ws=['Wisdom Code','Creative Variables','Business Design','Color Philosophy','Typography System','Motion Patterns','Self Evolution','Everything','Layout Geometry','CSS Variables','10-Layer Shield','Metamorphosis','30 Passages'];
+const wc=document.getElementById('words');
+ws.forEach(w=>{const s=document.createElement('span');s.textContent=w;s.style.cssText='position:absolute;font-size:13px;font-weight:300;letter-spacing:.5px;color:rgba(160,210,240,.5);text-shadow:0 0 12px rgba(140,200,230,.3)';wc.appendChild(s)});
+
+const fish=[];document.querySelectorAll('.words span').forEach(el=>{fish.push({el,x:200+Math.random()*700,y:280+Math.random()*300,vx:(Math.random()-.5)*.3,vy:(Math.random()-.5)*.2,phase:Math.random()*Math.PI*2})});
+
+function draw(){
+  t+=.007;ctx.clearRect(0,0,1200,630);const sy=270+Math.sin(t*.4)*1.5+Math.sin(t*.7)*1;
+
+  // Waves
+  ctx.beginPath();for(let x=0;x<=1200;x+=3){const y=sy+Math.sin(x*.0015+t*.4)*2.5+Math.sin(x*.003+t*.7)*1.5+Math.sin(x*.006+t*1)*.8;x===0?ctx.moveTo(x,y):ctx.lineTo(x,y)}ctx.strokeStyle='rgba(255,255,255,.35)';ctx.lineWidth=1.5;ctx.stroke();ctx.strokeStyle='rgba(200,180,220,.1)';ctx.lineWidth=8;ctx.stroke();
+
+  // Sparkles
+  for(let i=0;i<25;i++){const sx=(i*46+t*20)%1200;const sY=sy+Math.sin(i*1.5+t*1.7)*2;ctx.beginPath();ctx.arc(sx,sY,.5,0,Math.PI*2);ctx.fillStyle='rgba(255,255,255,'+(.1+Math.abs(Math.sin(i+t))*.15)+')';ctx.fill()}
+
+  // Fishing line
+  const rx=300,rt=50,rb=sy-30;ctx.beginPath();ctx.moveTo(rx-6,rt-40);ctx.lineTo(rx,rt);ctx.lineTo(rx+2,rb);const grd=ctx.createLinearGradient(rx-6,rt-40,rx+2,rb);grd.addColorStop(0,'#3a2010');grd.addColorStop(.4,'#6b4522');grd.addColorStop(1,'#9a6838');ctx.strokeStyle=grd;ctx.lineWidth=5;ctx.lineCap='round';ctx.stroke();
+
+  // Line
+  ctx.beginPath();ctx.moveTo(rx+2,rb);ctx.bezierCurveTo(rx+10,rb+15,rx+12,sy+3,rx+18,sy+18);ctx.strokeStyle='rgba(255,255,255,.12)';ctx.lineWidth=.6;ctx.stroke();
+
+  // Hook
+  const hx=rx+18,hy=sy+22;ctx.beginPath();ctx.moveTo(hx,hy-20);ctx.lineTo(hx,hy+16);ctx.strokeStyle='rgba(180,210,240,.7)';ctx.lineWidth=2;ctx.lineCap='round';ctx.stroke();ctx.beginPath();ctx.arc(hx-10,hy+16,11,0,Math.PI,false);ctx.strokeStyle='rgba(180,210,240,.7)';ctx.lineWidth=2;ctx.stroke();ctx.beginPath();ctx.moveTo(hx-21,hy+16);ctx.lineTo(hx-17,hy+6);ctx.strokeStyle='rgba(200,230,255,.8)';ctx.lineWidth=1.2;ctx.stroke();
+  const gl=ctx.createRadialGradient(hx-6,hy+5,1,hx-6,hy+5,25);gl.addColorStop(0,'rgba(140,200,240,.25)');gl.addColorStop(1,'rgba(40,80,140,0)');ctx.fillStyle=gl;ctx.fillRect(hx-30,hy-15,55,55);
+
+  // Particles
+  for(let i=0;i<60;i++){const x=(i*71+t*2)%1200;const y=280+(i*42+t*1.5)%340;ctx.beginPath();ctx.arc(x,y,.25,0,Math.PI*2);ctx.fillStyle='rgba(120,180,220,'+(.006+Math.abs(Math.sin(t+i*.3))*.012)+')';ctx.fill()}
+
+  // Text floating like fish
+  fish.forEach(f=>{f.x+=f.vx;f.y+=f.vy;if(f.x<150)f.x=1050;if(f.x>1050)f.x=150;if(f.y<275)f.y=275;if(f.y>580)f.y=580;f.el.style.left=f.x+'px';f.el.style.top=f.y+'px';f.el.style.opacity=.3+Math.sin(t+f.phase)*.1});
+
+  requestAnimationFrame(draw);
+}
+draw();
+</script>
+</body></html>
